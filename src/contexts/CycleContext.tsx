@@ -103,9 +103,9 @@ export function CyclesContextProvider({
   return (
     <CyclesContext.Provider
       value={{
-        cycles: cyclesState.cycles,
+        cycles: cyclesState.cycles || [],
         activeCycle,
-        activeCycleId: cyclesState.activeCycleId,
+        activeCycleId: cyclesState.activeCycleId || null,
         markCurrentCycleAsFinished,
         amountSecondsPassed,
         setSecondsPassed,

@@ -11,7 +11,6 @@ import {
   interruptCurrentCycleAction,
   markCurrentCycleAsFinishedAction,
 } from '../reducers/cycles/actions'
-
 import { Cycle, cyclesReducer } from '../reducers/cycles/reducer'
 
 interface CreateCycleData {
@@ -50,8 +49,13 @@ export function CyclesContextProvider({
         '@ignite-timer:cycles-state-1.0.0',
       )
 
-      if (storedStateJSON) {
+      if (storedStateJSON !== null) {
         return JSON.parse(storedStateJSON)
+      } else {
+        return {
+          cycles: [],
+          activeCycleId: null,
+        }
       }
     },
   )
@@ -60,11 +64,12 @@ export function CyclesContextProvider({
     const stateJSON = JSON.stringify(cyclesState)
 
     localStorage.setItem('@ignite-timer:cycles-state-1.0.0', stateJSON)
+
+    console.log(cyclesState)
   }, [cyclesState])
 
-  const activeCycle = cyclesState.cycles.find(
-    (cycle) => cycle.id === cyclesState.activeCycleId,
-  )
+  const { cycles, activeCycleId } = cyclesState
+  const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
 
   const [amountSecondsPassed, setAmountSecondsPassed] = useState(() => {
     if (activeCycle) {
@@ -103,9 +108,9 @@ export function CyclesContextProvider({
   return (
     <CyclesContext.Provider
       value={{
-        cycles: cyclesState.cycles || [],
+        cycles,
         activeCycle,
-        activeCycleId: cyclesState.activeCycleId || null,
+        activeCycleId,
         markCurrentCycleAsFinished,
         amountSecondsPassed,
         setSecondsPassed,

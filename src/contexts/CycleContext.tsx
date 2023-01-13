@@ -62,9 +62,8 @@ export function CyclesContextProvider({
     localStorage.setItem('@ignite-timer:cycles-state-1.0.0', stateJSON)
   }, [cyclesState])
 
-  const { activeCycleId } = cyclesState
   const activeCycle = cyclesState.cycles.find(
-    (cycle) => cycle.id === activeCycleId,
+    (cycle) => cycle.id === cyclesState.activeCycleId,
   )
 
   const [amountSecondsPassed, setAmountSecondsPassed] = useState(() => {
@@ -106,7 +105,7 @@ export function CyclesContextProvider({
       value={{
         cycles: cyclesState.cycles,
         activeCycle,
-        activeCycleId,
+        activeCycleId: cyclesState.activeCycleId,
         markCurrentCycleAsFinished,
         amountSecondsPassed,
         setSecondsPassed,
